@@ -1,0 +1,8 @@
+# docker-compose.yml
+version: '3'
+services:
+  consul:
+    image: consul:latest
+    ports:
+      - "8500:8500"
+    command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0
