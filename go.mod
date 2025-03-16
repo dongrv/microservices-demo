@@ -1,6 +1,6 @@
 module github.com/dongrv/microservices-demo
 
-go 1.23.0
+go 1.23.7
 
 require (
 	github.com/gin-gonic/gin v1.10.0

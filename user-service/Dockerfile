@@ -3,5 +3,5 @@ WORKDIR /app
 COPY . .
 RUN go mod download
 COPY . .
-RUN go build -o user-service
+RUN CGO_ENABLED=0 GOOS=linux go build -o user-service
 CMD [ "./user-service" ]

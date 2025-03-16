@@ -1,8 +1,47 @@
 # docker-compose.yml
-version: '3'
+
 services:
   consul:
-    image: consul:latest
+    image: consul:1.15.4
     ports:
       - "8500:8500"
     command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0
+    networks:
+      - app-net    # 使用自定义网络
+    volumes:
+      - consul-data:/data  # 挂载卷保存数据
+  
+  user-service:
+    build:      # 构建镜像
+      context: ./user-service  # 构建上下文路径
+      dockerfile: ./Dockerfile  # Dockerfile 路径
+    ports:
+      - "8081:8081"  # 映射端口（宿主机:容器）
+    networks:
+      - app-net    # 使用自定义网络
+
+  order-service:
+    build:      # 构建镜像
+      context: ./order-service  # 构建上下文路径
+      dockerfile: ./Dockerfile  # Dockerfile 路径
+    ports:
+      - "8082:8082"  # 映射端口（宿主机:容器）
+    networks:
+      - app-net    # 使用自定义网络
+
+
+  api-gateway:
+    build:      # 构建镜像
+      context: ./api-gateway  # 构建上下文路径
+      dockerfile: ./Dockerfile  # Dockerfile 路径
+    ports:
+      - "8080:8080"  # 映射端口（宿主机:容器）
+    networks:
+      - app-net    # 使用自定义网络
+
+networks:
+  app-net:       # 自定义网络
+    driver: bridge  # 使用桥接网络
+
+volumes:
+  consul-data:    # 定义命名卷
