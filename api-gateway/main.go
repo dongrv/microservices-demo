@@ -16,10 +16,10 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/api/users/:id", func(c *gin.Context) {
-		proxyRequest(c, "http://localhost:8081")
+		proxyRequest(c, "http://user-service:8081")
 	})
 	r.GET("/api/orders/:id", func(c *gin.Context) {
-		proxyRequest(c, "http://localhost:8082")
+		proxyRequest(c, "http://order-service:8082")
 	})
 	r.Run(":8080")
 }

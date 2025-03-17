@@ -20,15 +20,20 @@ func main() {
 	})
 
 	// user-service 启动时注册
-	client, _ := api.NewClient(api.DefaultConfig())
+	config := api.DefaultConfig()
+	config.Address = "consul:8500"
+	client, err := api.NewClient(config)
+	if err != nil {
+		panic(err)
+	}
 	registration := &api.AgentServiceRegistration{
 		ID:   "user-service-1",
 		Name: "user-service",
 		Port: 8081,
 		Check: &api.AgentServiceCheck{
-			HTTP:     "http://192.168.8.129:8081/health", // 健康检查地址
-			Interval: "5s",                               // 健康检查间隔
-			Timeout:  "2s",                               // 健康检查超时
+			HTTP:     "http://user-service:8081/health", // 健康检查地址
+			Interval: "5s",                              // 健康检查间隔
+			Timeout:  "2s",                              // 健康检查超时
 		},
 	}
 	client.Agent().ServiceRegister(registration)

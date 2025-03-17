@@ -5,6 +5,8 @@ services:
     image: consul:1.15.4
     ports:
       - "8500:8500"
+    environment:
+      CONSUL_ADDR: "consul:8500" # 使用 Docker DNS
     command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0
     networks:
       - app-net    # 使用自定义网络

@@ -20,13 +20,18 @@ func main() {
 	})
 
 	// order-service 发现用户服务地址
-	client, _ := api.NewClient(api.DefaultConfig())
+	config := api.DefaultConfig()
+	config.Address = "consul:8500"
+	client, err := api.NewClient(config)
+	if err != nil {
+		panic(err)
+	}
 	registration := &api.AgentServiceRegistration{
 		ID:   "order-service-1",
 		Name: "order-service",
 		Port: 8082,
 		Check: &api.AgentServiceCheck{
-			HTTP:     "http://192.168.8.129:8082/health", // 健康检查地址
+			HTTP:     "http://order-service:8082/health", // 健康检查地址
 			Interval: "5s",                               // 健康检查间隔
 			Timeout:  "2s",                               // 健康检查超时
 		},
