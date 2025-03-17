@@ -36,7 +36,9 @@ func main() {
 			Timeout:  "2s",                               // 健康检查超时
 		},
 	}
-	client.Agent().ServiceRegister(registration)
+	if err = client.Agent().ServiceRegister(registration); err != nil {
+		panic(err)
+	}
 
 	r.Run(":8082")
 }
