@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,10 +16,10 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/api/users/:id", func(c *gin.Context) {
-		proxyRequest(c, "http://user-service:8081")
+		proxyRequest(c, "http://localhost:8081")
 	})
 	r.GET("/api/orders/:id", func(c *gin.Context) {
-		proxyRequest(c, "http://order-service:8082")
+		proxyRequest(c, "http://localhost:8082")
 	})
 	r.Run(":8080")
 }
@@ -46,7 +47,7 @@ func proxyRequest(c *gin.Context, targetURL string) {
 		r.Host = target.Host // 重要：不分服务依赖Host头
 
 		// 保留原始路径和查询参数
-		r.URL.Path = c.Param("proxyPath")
+		r.URL.Path = strings.TrimPrefix(c.Request.URL.Path, "/api") // 其他服务路由无/api前缀
 		if c.Request.URL.RawQuery != "" || target.RawQuery != "" {
 			r.URL.RawQuery = c.Request.URL.RawQuery + "&" + target.RawQuery
 		}

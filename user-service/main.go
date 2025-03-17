@@ -26,9 +26,9 @@ func main() {
 		Name: "user-service",
 		Port: 8081,
 		Check: &api.AgentServiceCheck{
-			HTTP:     "http://localhost:8081/health", // 健康检查地址
-			Interval: "5s",                           // 健康检查间隔
-			Timeout:  "2s",                           // 健康检查超时
+			HTTP:     "http://192.168.8.129:8081/health", // 健康检查地址
+			Interval: "5s",                               // 健康检查间隔
+			Timeout:  "2s",                               // 健康检查超时
 		},
 	}
 	client.Agent().ServiceRegister(registration)
